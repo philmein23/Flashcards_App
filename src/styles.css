@@ -1,4 +1,61 @@
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: proxima-nova, sans-serif;
+  background-color: #f7f7f7;
+}
+
+* {
+  position: relative;
+}
+
 .App {
   font-family: sans-serif;
   text-align: center;
+}
+
+.add-new-button {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar-nav {
+  background-color: #464545;
+  height: 100vh;
+}
+
+.card-container {
+  display: flex;
+  align-items: center;
+}
+
+.main-card {
+  background-color: #fff;
+  width: 700px;
+  height: 300px;
+  margin: 70px auto;
+  box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.16);
+  border-radius: 20px;
+}
+
+.add-new {
+  border: none;
+  background-color: #fff;
+  border-radius: 50px;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.16);
+}
+
+.plus {
+  display: block;
+  font-size: 20px;
 }
