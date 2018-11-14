@@ -29,11 +29,30 @@ body {
 
 .sidebar-nav {
   background-color: #464545;
-  height: 100vh;
+  height: 100%;
+  grid-row: 1/-1;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  width: 100%;
 }
 
 .card-container {
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-nav > .small-card {
+  margin: 10px;
+}
+
+.small-card {
+  width: 250px;
+  height: 150px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
@@ -41,6 +60,13 @@ body {
   background-color: #fff;
   width: 700px;
   height: 300px;
+  margin: 0 auto;
+  box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.16);
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin: 70px auto;
   box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.16);
   border-radius: 20px;
@@ -58,4 +84,8 @@ body {
 .plus {
   display: block;
   font-size: 20px;
+}
+
+h1 {
+  grid-column: 2/-1;
 }

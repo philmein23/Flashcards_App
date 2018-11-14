@@ -6,12 +6,18 @@ import { useAppReducer } from "./state/reducer";
 import "./styles.css";
 
 function App() {
-  const { value: frontValue, onChange: onChangeFront } = useInputValue("");
-  const { value: backValue, onChange: onChangeBack } = useInputValue("");
+  const {
+    value: frontValue,
+    onChange: onChangeFront,
+    setState: setStateFront
+  } = useInputValue("");
+  const {
+    value: backValue,
+    onChange: onChangeBack,
+    setState: setStateBack
+  } = useInputValue("");
   const [flashCards, dispatch] = useAppReducer();
-
-  console.log(flashCards);
-
+  
   function saveFlashCard(event) {
     event.preventDefault();
     const flashCard = {
@@ -20,7 +26,14 @@ function App() {
     };
 
     dispatch({ type: "ADD_FLASHCARD", flashCard });
+    clearFields();
   }
+
+  function clearFields() {
+    setStateFront("");
+    setStateBack("");
+  }
+
   return (
     <form onSubmit={e => saveFlashCard(e)}>
       <div className="container">
@@ -39,6 +52,7 @@ function App() {
               <span className="plus">+</span>
             </button>
           </div>
+          {/** New card */}
           <div className="main-card">
             <div className="main-card-front">
               <input type="text" value={frontValue} onChange={onChangeFront} />
@@ -47,6 +61,7 @@ function App() {
               <input type="text" value={backValue} onChange={onChangeBack} />
             </div>
           </div>
+          {/** TO-DO: Add active card display. If card is active, then new card display should be hidden */}
         </div>
       </div>
     </form>
