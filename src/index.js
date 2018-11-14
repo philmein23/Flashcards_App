@@ -11,7 +11,6 @@ function App() {
   const [flashCards, dispatch] = useAppReducer();
 
   console.log(flashCards);
-  console.log(frontValue, backValue);
 
   function saveFlashCard(event) {
     event.preventDefault();
@@ -35,15 +34,21 @@ function App() {
           })}
         </div>
         <div className="card-container">
-          <div className="main-card-front">
-            <input type="text" value={frontValue} onChange={onChangeFront} />
+          <div className="add-new-button">
+            <button className="add-new" type="submit">
+              <span className="plus">+</span>
+            </button>
           </div>
-          <div className="main-card-back">
-            <input type="text" value={backValue} onChange={onChangeBack} />
+          <div className="main-card">
+            <div className="main-card-front">
+              <input type="text" value={frontValue} onChange={onChangeFront} />
+            </div>
+            <div className="main-card-back">
+              <input type="text" value={backValue} onChange={onChangeBack} />
+            </div>
           </div>
         </div>
       </div>
-      <button type="submit">Add Card</button>
     </form>
   );
 }
