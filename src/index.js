@@ -13,13 +13,15 @@ function App() {
 
   console.log("actives", activeCard);
 
-  useEffect(() => {
-    console.log("effect");
-    resetFlipClass();
-    setupListener();
+  useEffect(
+    () => {
+      console.log("effectsss");
+      setupListener();
 
-    return () => removeListener();
-  });
+      return () => removeListener();
+    },
+    [isAdding]
+  );
 
   const {
     value: frontValue,
@@ -38,33 +40,30 @@ function App() {
   }
 
   function removeListener() {
-    cardContainer.current.removeEventListener("click", toggleFlip);
-  }
-
-  function resetFlipClass() {
-    console.log(cardContainer.current.classList.toggle("flipme"));
-    if (cardContainer.current.classList.toggle("flipme")) {
-      cardContainer.current.classList.remove("flipme");
-    }
+    mainCard.current.removeEventListener("click", toggleFlip);
   }
 
   function toggleFlip(event) {
+    let cardContainerClassList = cardContainer.current.classList;
     console.log("listener");
     console.log(event.target);
-    // if (event.target !== mainCard) {
-    //   return;
-    // }
-    let value = cardContainer.current.classList.toggle("flipme");
+
+    /** Clicking input field should not trigger class toggling */
+    if (event.target !== mainCard.current) return;
+
+    let value = cardContainerClassList.toggle("flipme");
     console.log(value);
   }
 
   function addNewCard(event) {
     event.preventDefault();
+    clearFields();
     setState(true);
   }
 
   function saveFlashCard(event) {
     event.preventDefault();
+
     const flashCard = {
       front: frontValue,
       back: backValue
