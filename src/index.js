@@ -23,6 +23,7 @@ function App() {
   } = useInputValue("");
   const [flashCards, dispatch] = useAppReducer();
 
+
   function addNewCard(event) {
     event.preventDefault();
     setState(true);
