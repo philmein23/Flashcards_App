@@ -23,6 +23,7 @@ function App() {
     [isAdding]
   );
 
+
   const {
     value: frontValue,
     onChange: onChangeFront,
@@ -47,12 +48,11 @@ function App() {
     let cardContainerClassList = cardContainer.current.classList;
     console.log("listener");
     console.log(event.target);
-
+    
     /** Clicking input field should not trigger class toggling */
     if (event.target !== mainCard.current) return;
 
     let value = cardContainerClassList.toggle("flipme");
-    console.log(value);
   }
 
   function addNewCard(event) {
