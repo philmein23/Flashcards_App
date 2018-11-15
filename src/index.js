@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { useInputValue } from "./state/useInput";
 import { useAppReducer } from "./state/reducer";
@@ -7,9 +7,19 @@ import "./styles.css";
 
 function App() {
   let activeCard = useRef(null);
+  let mainCard = useRef();
+  let cardContainer = useRef();
   let [isAdding, setState] = useState(false);
 
   console.log("actives", activeCard);
+
+  useEffect(() => {
+    console.log("effect");
+    resetFlipClass();
+    setupListener();
+
+    return () => removeListener();
+  });
 
   const {
     value: frontValue,
@@ -22,6 +32,31 @@ function App() {
     setState: setStateBack
   } = useInputValue("");
   const [flashCards, dispatch] = useAppReducer();
+
+  function setupListener() {
+    mainCard.current.addEventListener("click", toggleFlip);
+  }
+
+  function removeListener() {
+    cardContainer.current.removeEventListener("click", toggleFlip);
+  }
+
+  function resetFlipClass() {
+    console.log(cardContainer.current.classList.toggle("flipme"));
+    if (cardContainer.current.classList.toggle("flipme")) {
+      cardContainer.current.classList.remove("flipme");
+    }
+  }
+
+  function toggleFlip(event) {
+    console.log("listener");
+    console.log(event.target);
+    // if (event.target !== mainCard) {
+    //   return;
+    // }
+    let value = cardContainer.current.classList.toggle("flipme");
+    console.log(value);
+  }
 
   function addNewCard(event) {
     event.preventDefault();
@@ -93,8 +128,12 @@ function App() {
               <span className="plus">+</span>
             </button>
           </div>
-          <div className="card-container">
-            <div className="main-card">
+          <div
+            ref={cardContainer}
+            id="card-container"
+            className="card-container"
+          >
+            <div ref={mainCard} className="main-card">
               {isAdding ? renderNewCard() : renderActiveCard()}
             </div>
           </div>
