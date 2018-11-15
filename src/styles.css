@@ -16,9 +16,10 @@ body {
 }
 
 .add-new-button {
-  position: absolute;
-  top: 50px;
-  right: 50px;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  margin-bottom: 20px;
 }
 
 .container {
@@ -65,8 +66,8 @@ body {
   border-radius: 20px;
   display: flex;
   justify-content: center;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
 }
 
 .add-new {
@@ -85,4 +86,25 @@ body {
 
 h1 {
   grid-column: 2/-1;
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+button.submit {
+  border: none;
+  background-color: #464545;
+  color: #fff;
+  padding: 15px 10px;
+  border-radius: 10px;
+  letter-spacing: 2px;
+}
+
+.relative {
+  width: 700px;
+  margin: 150px auto;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { useInputValue } from "./state/useInput";
 import { useAppReducer } from "./state/reducer";
@@ -6,6 +6,11 @@ import { useAppReducer } from "./state/reducer";
 import "./styles.css";
 
 function App() {
+  let activeCard = useRef(null);
+  let [isAdding, setState] = useState(false);
+
+  console.log("actives", activeCard);
+
   const {
     value: frontValue,
     onChange: onChangeFront,
@@ -18,6 +23,11 @@ function App() {
   } = useInputValue("");
   const [flashCards, dispatch] = useAppReducer();
 
+  function addNewCard(event) {
+    event.preventDefault();
+    setState(true);
+  }
+
   function saveFlashCard(event) {
     event.preventDefault();
     const flashCard = {
@@ -25,13 +35,44 @@ function App() {
       back: backValue
     };
 
+    activeCard.current = flashCard;
+
     dispatch({ type: "ADD_FLASHCARD", flashCard });
+    setState(false);
     clearFields();
   }
 
   function clearFields() {
     setStateFront("");
     setStateBack("");
+  }
+
+  function renderActiveCard() {
+    return (
+      <>
+        {activeCard.current ? (
+          <>
+            <div className="main-card-front">{activeCard.current.front}</div>
+            <div className="main-card-back">{activeCard.current.back}</div>
+          </>
+        ) : (
+          <div>{null}</div>
+        )}
+      </>
+    );
+  }
+
+  function renderNewCard() {
+    return (
+      <>
+        <div className="main-card-front">
+          <input type="text" value={frontValue} onChange={onChangeFront} />
+        </div>
+        <div className="main-card-back">
+          <input type="text" value={backValue} onChange={onChangeBack} />
+        </div>
+      </>
+    );
   }
 
   return (
@@ -46,22 +87,20 @@ function App() {
             );
           })}
         </div>
-        <div className="card-container">
+        <div className="relative">
           <div className="add-new-button">
-            <button className="add-new" type="submit">
+            <button className="add-new" onClick={e => addNewCard(e)}>
               <span className="plus">+</span>
             </button>
           </div>
-          {/** New card */}
-          <div className="main-card">
-            <div className="main-card-front">
-              <input type="text" value={frontValue} onChange={onChangeFront} />
-            </div>
-            <div className="main-card-back">
-              <input type="text" value={backValue} onChange={onChangeBack} />
+          <div className="card-container">
+            <div className="main-card">
+              {isAdding ? renderNewCard() : renderActiveCard()}
             </div>
           </div>
-          {/** TO-DO: Add active card display. If card is active, then new card display should be hidden */}
+          <div className="button-container">
+            <button className="submit">Save Card</button>
+          </div>
         </div>
       </div>
     </form>
