@@ -14,8 +14,7 @@ function App() {
   console.log("actives", activeCard);
 
   useEffect(() => {
-    console.log("effect");
-    resetFlipClass();
+    console.log("effectsss");
     setupListener();
 
     return () => removeListener();
@@ -41,19 +40,10 @@ function App() {
     cardContainer.current.removeEventListener("click", toggleFlip);
   }
 
-  function resetFlipClass() {
-    console.log(cardContainer.current.classList.toggle("flipme"));
-    if (cardContainer.current.classList.toggle("flipme")) {
-      cardContainer.current.classList.remove("flipme");
-    }
-  }
-
   function toggleFlip(event) {
     console.log("listener");
     console.log(event.target);
-    // if (event.target !== mainCard) {
-    //   return;
-    // }
+
     let value = cardContainer.current.classList.toggle("flipme");
     console.log(value);
   }
