@@ -75,7 +75,7 @@ input {
   transform: rotateY(180deg);
 }
 
-.sidebar-nav > .small-card {
+.sidebar-nav>.small-card {
   margin: 10px;
 }
 
@@ -86,6 +86,11 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+}
+
+.active-card {
+  border: 5px solid skyblue;
 }
 
 .main-card {
