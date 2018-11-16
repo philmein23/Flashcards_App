@@ -1,21 +1,22 @@
-import React, { useRef, useState, useEffect } from "react";
-import ReactDOM from "react-dom";
-import { useInputValue } from "./state/useInput";
-import { useAppReducer } from "./state/reducer";
+import React, { useRef, useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import { useInputValue } from './state/useInput';
+import { useAppReducer } from './state/reducer';
+import { generateId } from './utils';
 
-import "./styles.css";
+import './styles.css';
 
 function App() {
-  let activeCard = useRef(null);
   let mainCard = useRef();
   let cardContainer = useRef();
   let [isAdding, setState] = useState(false);
+  let [activeCard, setActiveCard] = useState(null);
 
-  console.log("actives", activeCard);
+  console.log('actives', activeCard);
 
   useEffect(
     () => {
-      console.log("effectsss");
+      console.log('effectsss');
       setupListener();
 
       return () => removeListener();
@@ -23,36 +24,35 @@ function App() {
     [isAdding]
   );
 
-
   const {
     value: frontValue,
     onChange: onChangeFront,
     setState: setStateFront
-  } = useInputValue("");
+  } = useInputValue('');
   const {
     value: backValue,
     onChange: onChangeBack,
     setState: setStateBack
-  } = useInputValue("");
+  } = useInputValue('');
   const [flashCards, dispatch] = useAppReducer();
 
   function setupListener() {
-    mainCard.current.addEventListener("click", toggleFlip);
+    mainCard.current.addEventListener('click', toggleFlip);
   }
 
   function removeListener() {
-    mainCard.current.removeEventListener("click", toggleFlip);
+    mainCard.current.removeEventListener('click', toggleFlip);
   }
 
   function toggleFlip(event) {
     let cardContainerClassList = cardContainer.current.classList;
-    console.log("listener");
+    console.log('listener');
     console.log(event.target);
-    
+
     /** Clicking input field should not trigger class toggling */
     if (event.target !== mainCard.current) return;
 
-    let value = cardContainerClassList.toggle("flipme");
+    cardContainerClassList.toggle('flipme');
   }
 
   function addNewCard(event) {
@@ -65,29 +65,38 @@ function App() {
     event.preventDefault();
 
     const flashCard = {
+      id: generateId(),
       front: frontValue,
-      back: backValue
+      back: backValue,
+      isActive: false
     };
 
-    activeCard.current = flashCard;
+    setActiveCard(flashCard);
 
-    dispatch({ type: "ADD_FLASHCARD", flashCard });
+    dispatch({ type: 'ADD_FLASHCARD', flashCard });
     setState(false);
     clearFields();
   }
 
   function clearFields() {
-    setStateFront("");
-    setStateBack("");
+    setStateFront('');
+    setStateBack('');
+  }
+
+  function selectCard(flashCard) {
+    flashCard.isActive = true;
+    console.log(flashCard);
+
+    dispatch({ type: 'UPDATE_FLASHCARD', flashCard });
   }
 
   function renderActiveCard() {
     return (
       <>
-        {activeCard.current ? (
+        {activeCard ? (
           <>
-            <div className="main-card-front">{activeCard.current.front}</div>
-            <div className="main-card-back">{activeCard.current.back}</div>
+            <div className="main-card-front">{activeCard.front}</div>
+            <div className="main-card-back">{activeCard.back}</div>
           </>
         ) : (
           <div>{null}</div>
@@ -115,7 +124,10 @@ function App() {
         <div className="sidebar-nav">
           {flashCards.map(card => {
             return (
-              <div className="small-card">
+              <div
+                className={`small-card ${card.isActive ? 'active-card' : ''}`}
+                onClick={() => selectCard(card)}
+              >
                 <div className="front-small">{card.front}</div>
               </div>
             );
@@ -145,5 +157,5 @@ function App() {
   );
 }
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 ReactDOM.render(<App />, rootElement);
