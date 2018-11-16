@@ -3,7 +3,6 @@ import { useReducer } from 'react';
 const initialState = [];
 
 function flashCardsReducer(state = [], action) {
-  console.log('action', action);
   if (action.type === 'GET_FLASHCARDS') {
     return state;
   }
