@@ -46,8 +46,6 @@ function App() {
 
   function toggleFlip(event) {
     let cardContainerClassList = cardContainer.current.classList;
-    console.log('listener');
-    console.log(event.target);
 
     /** Clicking input field should not trigger class toggling */
     if (event.target !== mainCard.current) return;
@@ -85,9 +83,9 @@ function App() {
 
   function selectCard(flashCard) {
     flashCard.isActive = true;
-    console.log(flashCard);
 
     dispatch({ type: 'UPDATE_FLASHCARD', flashCard });
+    setActiveCard(flashCard);
   }
 
   function renderActiveCard() {
