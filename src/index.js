@@ -12,11 +12,8 @@ function App() {
   let [isAdding, setState] = useState(false);
   let [activeCard, setActiveCard] = useState(null);
 
-  console.log('actives', activeCard);
-
   useEffect(
     () => {
-      console.log('effectsss');
       setupListener();
 
       return () => removeListener();
