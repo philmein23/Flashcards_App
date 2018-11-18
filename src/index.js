@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { useInputValue } from './state/useInput';
 import { useAppReducer } from './state/reducer';
@@ -9,7 +9,7 @@ import './styles.css';
 function App() {
   let mainCard = useRef();
   let cardContainer = useRef();
-  let [isAdding, setState] = useState(false);
+  let [isEditing, setState] = useState(false);
   let [activeCard, setActiveCard] = useState(null);
 
   useEffect(
@@ -18,7 +18,7 @@ function App() {
 
       return () => removeListener();
     },
-    [isAdding]
+    [isEditing]
   );
 
   const {
@@ -81,7 +81,7 @@ function App() {
   function selectCard(flashCard) {
     flashCard.isActive = true;
 
-    dispatch({ type: 'UPDATE_FLASHCARD', flashCard });
+    dispatch({ type: 'SELECT_FLASHCARD', flashCard });
     setActiveCard(flashCard);
   }
 
@@ -102,15 +102,19 @@ function App() {
 
   function renderNewCard() {
     return (
-      <>
+      <Fragment>
         <div className="main-card-front">
           <input type="text" value={frontValue} onChange={onChangeFront} />
         </div>
         <div className="main-card-back">
           <input type="text" value={backValue} onChange={onChangeBack} />
         </div>
-      </>
+      </Fragment>
     );
+  }
+
+  function renderSaveButton() {
+    return <button className="submit">Save Card</button>;
   }
 
   return (
@@ -120,6 +124,7 @@ function App() {
           {flashCards.map(card => {
             return (
               <div
+                key={card.id}
                 className={`small-card ${card.isActive ? 'active-card' : ''}`}
                 onClick={() => selectCard(card)}
               >
@@ -140,11 +145,11 @@ function App() {
             className="card-container"
           >
             <div ref={mainCard} className="main-card">
-              {isAdding ? renderNewCard() : renderActiveCard()}
+              {isEditing ? renderNewCard() : renderActiveCard()}
             </div>
           </div>
           <div className="button-container">
-            <button className="submit">Save Card</button>
+            {isEditing ? renderSaveButton() : null}
           </div>
         </div>
       </div>
