@@ -3,23 +3,31 @@ import ReactDOM from 'react-dom';
 import { useInputValue } from './state/useInput';
 import { useAppReducer } from './state/reducer';
 import { generateId } from './utils';
+import { firebaseStore } from './firebase';
 
 import './styles.css';
 
 function App() {
   let mainCard = useRef();
   let cardContainer = useRef();
-  let [isEditing, setState] = useState(false);
+  let [isEditing, setEditingState] = useState(false);
   let [activeCard, setActiveCard] = useState(null);
+  let { database } = firebaseStore();
 
   useEffect(
     () => {
       setupListener();
+      getFlashCardCollection();
 
       return () => removeListener();
     },
     [isEditing]
   );
+
+  async function getFlashCardCollection() {
+    let querySnapshot = await database.collection('flashcards').get();
+    querySnapshot.docs.forEach(doc => console.log(doc.data()));
+  }
 
   const {
     value: frontValue,
@@ -53,10 +61,10 @@ function App() {
   function addNewCard(event) {
     event.preventDefault();
     clearFields();
-    setState(true);
+    setEditingState(true);
   }
 
-  function saveFlashCard(event) {
+  async function saveFlashCard(event) {
     event.preventDefault();
 
     const flashCard = {
@@ -68,8 +76,10 @@ function App() {
 
     setActiveCard(flashCard);
 
+    await database.collection('flashcards').add(flashCard);
+
     dispatch({ type: 'ADD_FLASHCARD', flashCard });
-    setState(false);
+    setEditingState(false);
     clearFields();
   }
 
