@@ -1,5 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
+import { useAppReducer } from './state/reducer';
 
 let config = {
   apiKey: 'AIzaSyByNOLd5G_2ebgebwPDl61r433A7GjaaEs',
@@ -16,8 +17,26 @@ database.settings({
   timestampsInSnapshots: true
 });
 
-export function firebaseStore() {
+export function useFirebaseStore() {
+  let flashCardCollection = database.collection('flashcards');
+  let { state: flashCards, dispatch } = useAppReducer();
+
+  console.log('render fb');
+  async function getFlashcards() {
+    let querySnapshot = await flashCardCollection.get();
+    let flashCards = querySnapshot.docs.map(doc => doc.data());
+    console.log('cardssss', flashCards);
+    dispatch({ type: 'GET_FLASHCARDS', flashCards });
+  }
+
+  async function addFlashCard(flashCard) {
+    await flashCardCollection.add(flashCard);
+    dispatch({ type: 'ADD_FLASHCARD', flashCard });
+  }
+
   return {
-    database
+    getFlashcards,
+    addFlashCard,
+    flashCards
   };
 }

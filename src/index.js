@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { useInputValue } from './state/useInput';
 import { useAppReducer } from './state/reducer';
 import { generateId } from './utils';
-import { firebaseStore } from './firebase';
+import { useFirebaseStore } from './firebase';
 
 import './styles.css';
 
@@ -12,22 +12,18 @@ function App() {
   let cardContainer = useRef();
   let [isEditing, setEditingState] = useState(false);
   let [activeCard, setActiveCard] = useState(null);
-  let { database } = firebaseStore();
-
+  let { dispatch } = useAppReducer();
+  let { flashCards, getFlashcards, addFlashCard } = useFirebaseStore();
+  console.log('render');
   useEffect(
     () => {
+      console.log('call effect');
       setupListener();
-      getFlashCardCollection();
-
+      getFlashcards();
       return () => removeListener();
     },
-    [isEditing]
+    [activeCard]
   );
-
-  async function getFlashCardCollection() {
-    let querySnapshot = await database.collection('flashcards').get();
-    querySnapshot.docs.forEach(doc => console.log(doc.data()));
-  }
 
   const {
     value: frontValue,
@@ -39,7 +35,6 @@ function App() {
     onChange: onChangeBack,
     setState: setStateBack
   } = useInputValue('');
-  const [flashCards, dispatch] = useAppReducer();
 
   function setupListener() {
     mainCard.current.addEventListener('click', toggleFlip);
@@ -74,11 +69,8 @@ function App() {
       isActive: false
     };
 
+    await addFlashCard(flashCard);
     setActiveCard(flashCard);
-
-    await database.collection('flashcards').add(flashCard);
-
-    dispatch({ type: 'ADD_FLASHCARD', flashCard });
     setEditingState(false);
     clearFields();
   }
