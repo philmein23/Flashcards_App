@@ -1,11 +1,11 @@
-import React, { useRef, useState, useEffect, Fragment } from 'react';
-import ReactDOM from 'react-dom';
-import { useInputValue } from './state/useInput';
-import { useAppReducer } from './state/reducer';
-import { generateId } from './utils';
-import { useFirebaseStore } from './firebase';
+import React, { useRef, useState, useEffect, Fragment } from "react";
+import ReactDOM from "react-dom";
+import { useInputValue } from "./state/useInput";
+import { useAppReducer } from "./state/reducer";
+import { generateId } from "./utils";
+import { useFirebaseStore } from "./firebase";
 
-import './styles.css';
+import "./styles.css";
 
 function App() {
   let mainCard = useRef();
@@ -14,12 +14,13 @@ function App() {
   let [activeCard, setActiveCard] = useState(null);
   let { dispatch } = useAppReducer();
   let { flashCards, getFlashcards, addFlashCard } = useFirebaseStore();
-  console.log('render');
   useEffect(
     () => {
-      console.log('call effect');
       setupListener();
       getFlashcards();
+
+      setActiveCard(activeCard);
+
       return () => removeListener();
     },
     [activeCard]
@@ -29,19 +30,19 @@ function App() {
     value: frontValue,
     onChange: onChangeFront,
     setState: setStateFront
-  } = useInputValue('');
+  } = useInputValue("");
   const {
     value: backValue,
     onChange: onChangeBack,
     setState: setStateBack
-  } = useInputValue('');
+  } = useInputValue("");
 
   function setupListener() {
-    mainCard.current.addEventListener('click', toggleFlip);
+    mainCard.current.addEventListener("click", toggleFlip);
   }
 
   function removeListener() {
-    mainCard.current.removeEventListener('click', toggleFlip);
+    mainCard.current.removeEventListener("click", toggleFlip);
   }
 
   function toggleFlip(event) {
@@ -50,7 +51,7 @@ function App() {
     /** Clicking input field should not trigger class toggling */
     if (event.target !== mainCard.current) return;
 
-    cardContainerClassList.toggle('flipme');
+    cardContainerClassList.toggle("flipme");
   }
 
   function addNewCard(event) {
@@ -65,8 +66,7 @@ function App() {
     const flashCard = {
       id: generateId(),
       front: frontValue,
-      back: backValue,
-      isActive: false
+      back: backValue
     };
 
     await addFlashCard(flashCard);
@@ -76,14 +76,20 @@ function App() {
   }
 
   function clearFields() {
-    setStateFront('');
-    setStateBack('');
+    setStateFront("");
+    setStateBack("");
   }
 
   function selectCard(flashCard) {
     flashCard.isActive = true;
 
-    dispatch({ type: 'SELECT_FLASHCARD', flashCard });
+    flashCards.forEach(card => {
+      if (card.id !== flashCard.id) {
+        card.isActive = false;
+      }
+    });
+
+    // dispatch({ type: "SELECT_FLASHCARD", flashCard });
     setActiveCard(flashCard);
   }
 
@@ -123,11 +129,12 @@ function App() {
     <form onSubmit={e => saveFlashCard(e)}>
       <div className="container">
         <div className="sidebar-nav">
-          {flashCards.map(card => {
+          {flashCards.map((card, i) => {
             return (
               <div
                 key={card.id}
-                className={`small-card ${card.isActive ? 'active-card' : ''}`}
+                style={{ "--i": i }}
+                className={`small-card ${card.isActive ? "active-card" : ""}`}
                 onClick={() => selectCard(card)}
               >
                 <div className="front-small">{card.front}</div>
@@ -159,5 +166,5 @@ function App() {
   );
 }
 
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);

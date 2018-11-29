@@ -72,7 +72,7 @@ input {
   transform: rotateY(180deg);
 }
 
-.sidebar-nav>.small-card {
+.sidebar-nav > .small-card {
   margin: 10px;
 }
 
@@ -84,16 +84,24 @@ input {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  animation: item 0.9s calc(var(--i, 0) * 0.09s) cubic-bezier(0.5, 0, 0.2, 1)
+    both;
+}
+
+@keyframes item {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .active-card {
   padding: 10px;
   border: 1px solid #77aaff;
-  box-shadow: -1px 1px #77aaff,
-    -2px 2px #77aaff,
-    -3px 3px #77aaff,
-    -4px 4px #77aaff,
-    -5px 5px #77aaff;
+  box-shadow: -1px 1px #77aaff, -2px 2px #77aaff, -3px 3px #77aaff,
+    -4px 4px #77aaff, -5px 5px #77aaff;
 }
 
 .main-card {
