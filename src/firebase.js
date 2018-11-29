@@ -21,10 +21,10 @@ export function useFirebaseStore() {
   let flashCardCollection = database.collection("flashcards");
   let { state: flashCards, dispatch } = useAppReducer();
 
-  console.log("render fb");
   async function getFlashcards() {
     let querySnapshot = await flashCardCollection.get();
     let flashCards = querySnapshot.docs.map(doc => doc.data());
+    console.log("get", flashCards);
     dispatch({ type: "GET_FLASHCARDS", flashCards });
   }
 

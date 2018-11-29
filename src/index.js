@@ -12,14 +12,13 @@ function App() {
   let cardContainer = useRef();
   let [isEditing, setEditingState] = useState(false);
   let [activeCard, setActiveCard] = useState(null);
+  let [sidebarIsActive, toggleSideBar] = useState(true);
   let { dispatch } = useAppReducer();
   let { flashCards, getFlashcards, addFlashCard } = useFirebaseStore();
   useEffect(
     () => {
       setupListener();
       getFlashcards();
-
-      setActiveCard(activeCard);
 
       return () => removeListener();
     },
@@ -93,6 +92,11 @@ function App() {
     setActiveCard(flashCard);
   }
 
+  function toggleSideMenu(e) {
+    e.preventDefault();
+    toggleSideBar(!sidebarIsActive);
+  }
+
   function renderActiveCard() {
     return (
       <>
@@ -128,7 +132,11 @@ function App() {
   return (
     <form onSubmit={e => saveFlashCard(e)}>
       <div className="container">
-        <div className="sidebar-nav">
+        <div
+          className={`sidebar-nav ${
+            !sidebarIsActive ? "sidebar-nav-hidden" : ""
+          }`}
+        >
           {flashCards.map((card, i) => {
             return (
               <div
@@ -144,6 +152,7 @@ function App() {
         </div>
         <div className="relative">
           <div className="add-new-button">
+            <button onClick={e => toggleSideMenu(e)}>Toggle Menu</button>
             <button className="add-new" onClick={e => addNewCard(e)}>
               <span className="plus">+</span>
             </button>
