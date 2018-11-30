@@ -20,6 +20,8 @@ function App() {
       setupListener();
       getFlashcards();
 
+      setActiveCard(activeCard);
+
       return () => removeListener();
     },
     [activeCard]
@@ -92,8 +94,7 @@ function App() {
     setActiveCard(flashCard);
   }
 
-  function toggleSideMenu(e) {
-    e.preventDefault();
+  function toggleSideMenu() {
     toggleSideBar(!sidebarIsActive);
   }
 
@@ -133,9 +134,9 @@ function App() {
     <form onSubmit={e => saveFlashCard(e)}>
       <div className="container">
         <div
-          className={`sidebar-nav ${
-            !sidebarIsActive ? "sidebar-nav-hidden" : ""
-          }`}
+          className={`sidebar-nav 
+          ${flashCards.length ? "sidebar-nav-displayed" : ""}
+          ${!sidebarIsActive ? "sidebar-nav-animated" : ""}`}
         >
           {flashCards.map((card, i) => {
             return (
@@ -152,7 +153,9 @@ function App() {
         </div>
         <div className="relative">
           <div className="add-new-button">
-            <button onClick={e => toggleSideMenu(e)}>Toggle Menu</button>
+            <button className="toggle-button" onClick={() => toggleSideMenu()}>
+              Toggle Menu
+            </button>
             <button className="add-new" onClick={e => addNewCard(e)}>
               <span className="plus">+</span>
             </button>
