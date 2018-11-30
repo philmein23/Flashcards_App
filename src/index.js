@@ -94,6 +94,9 @@ function App() {
     setActiveCard(flashCard);
   }
 
+  /** TODO - ADD EDIT CARD FUNCTION */
+  /** TODO - ADD REMOVE CARD FUNCTION */
+
   function toggleSideMenu(e) {
     e.preventDefault();
     toggleSideBar(!sidebarIsActive);
