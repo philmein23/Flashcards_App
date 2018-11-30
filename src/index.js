@@ -36,7 +36,7 @@ function App() {
 
       return () => removeListener();
     },
-    [activeCard]
+    [isEditing]
   );
 
   function setupListener() {
@@ -93,11 +93,16 @@ function App() {
       }
     });
 
-    // dispatch({ type: "SELECT_FLASHCARD", flashCard });
     setActiveCard(flashCard);
   }
 
   /** TODO - ADD EDIT CARD FUNCTION */
+  function editCard(selectedCard) {
+    setStateFront(selectedCard.front);
+    setStateBack(selectedCard.back);
+
+    setEditingState(true);
+  }
   /** TODO - ADD REMOVE CARD FUNCTION */
 
   function toggleSideMenu(e) {
