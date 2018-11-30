@@ -94,7 +94,8 @@ function App() {
     setActiveCard(flashCard);
   }
 
-  function toggleSideMenu() {
+  function toggleSideMenu(e) {
+    e.preventDefault();
     toggleSideBar(!sidebarIsActive);
   }
 
@@ -153,7 +154,7 @@ function App() {
         </div>
         <div className="relative">
           <div className="add-new-button">
-            <button className="toggle-button" onClick={() => toggleSideMenu()}>
+            <button className="toggle-button" onClick={e => toggleSideMenu(e)}>
               Toggle Menu
             </button>
             <button className="add-new" onClick={e => addNewCard(e)}>
