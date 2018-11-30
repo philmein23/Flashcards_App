@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect, Fragment } from "react";
 import ReactDOM from "react-dom";
+import Flashcard from "./components/flashcard";
+import SmallFlashcard from "./components/small-flashcard";
 import { useInputValue } from "./state/useInput";
 import { useAppReducer } from "./state/reducer";
 import { generateId } from "./utils";
@@ -13,7 +15,6 @@ function App() {
   let [isEditing, setEditingState] = useState(false);
   let [activeCard, setActiveCard] = useState(null);
   let [sidebarIsActive, toggleSideBar] = useState(true);
-  let { dispatch } = useAppReducer();
   let { flashCards, getFlashcards, addFlashCard } = useFirebaseStore();
   useEffect(
     () => {
@@ -102,36 +103,20 @@ function App() {
     toggleSideBar(!sidebarIsActive);
   }
 
-  function renderActiveCard() {
-    return (
-      <>
-        {activeCard ? (
-          <>
-            <div className="main-card-front">{activeCard.front}</div>
-            <div className="main-card-back">{activeCard.back}</div>
-          </>
-        ) : (
-          <div>{null}</div>
-        )}
-      </>
-    );
-  }
-
-  function renderNewCard() {
-    return (
-      <Fragment>
-        <div className="main-card-front">
-          <input type="text" value={frontValue} onChange={onChangeFront} />
-        </div>
-        <div className="main-card-back">
-          <input type="text" value={backValue} onChange={onChangeBack} />
-        </div>
-      </Fragment>
-    );
-  }
-
-  function renderSaveButton() {
-    return <button className="submit">Save Card</button>;
+  function addFlashcardProps() {
+    return {
+      frontValue,
+      onChangeFront,
+      backValue,
+      onChangeBack,
+      activeCard,
+      isEditing,
+      addNewCard,
+      toggleSideMenu,
+      sidebarIsActive,
+      mainCard,
+      cardContainer
+    };
   }
 
   return (
@@ -142,44 +127,17 @@ function App() {
           ${flashCards.length ? "sidebar-nav-displayed" : ""}
           ${!sidebarIsActive ? "sidebar-nav-animated" : ""}`}
         >
-          {flashCards.map((card, i) => {
+          {flashCards.map((card, index) => {
             return (
-              <div
-                key={card.id}
-                style={{ "--i": i }}
-                className={`small-card ${card.isActive ? "active-card" : ""}`}
-                onClick={() => selectCard(card)}
-              >
-                <div className="front-small">{card.front}</div>
-              </div>
+              <SmallFlashcard
+                selectCard={selectCard}
+                card={card}
+                index={index}
+              />
             );
           })}
         </div>
-        <div
-          className={`relative 
-            ${!sidebarIsActive ? "sidebar-nav-animated" : ""}`}
-        >
-          <div className="add-new-button">
-            <button className="toggle-button" onClick={e => toggleSideMenu(e)}>
-              Toggle Menu
-            </button>
-            <button className="add-new" onClick={e => addNewCard(e)}>
-              <span className="plus">+</span>
-            </button>
-          </div>
-          <div
-            ref={cardContainer}
-            id="card-container"
-            className="card-container"
-          >
-            <div ref={mainCard} className="main-card">
-              {isEditing ? renderNewCard() : renderActiveCard()}
-            </div>
-          </div>
-          <div className="button-container">
-            {isEditing ? renderSaveButton() : null}
-          </div>
-        </div>
+        <Flashcard {...addFlashcardProps()} />
       </div>
     </form>
   );
