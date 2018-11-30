@@ -155,7 +155,10 @@ function App() {
             );
           })}
         </div>
-        <div className="relative">
+        <div
+          className={`relative 
+            ${!sidebarIsActive ? "sidebar-nav-animated" : ""}`}
+        >
           <div className="add-new-button">
             <button className="toggle-button" onClick={e => toggleSideMenu(e)}>
               Toggle Menu

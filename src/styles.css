@@ -168,4 +168,5 @@ button.submit,
 .relative {
   width: 700px;
   margin: 150px auto;
+  transition: transform 0.8s cubic-bezier(0.075, 0.52, 0.165, 1);
 }
