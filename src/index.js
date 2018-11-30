@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import Flashcard from "./components/flashcard";
 import SmallFlashcard from "./components/small-flashcard";
 import { useInputValue } from "./state/useInput";
-import { useAppReducer } from "./state/reducer";
 import { generateId } from "./utils";
 import { useFirebaseStore } from "./firebase";
 
@@ -16,17 +15,6 @@ function App() {
   let [activeCard, setActiveCard] = useState(null);
   let [sidebarIsActive, toggleSideBar] = useState(true);
   let { flashCards, getFlashcards, addFlashCard } = useFirebaseStore();
-  useEffect(
-    () => {
-      setupListener();
-      getFlashcards();
-
-      setActiveCard(activeCard);
-
-      return () => removeListener();
-    },
-    [activeCard]
-  );
 
   const {
     value: frontValue,
@@ -38,6 +26,18 @@ function App() {
     onChange: onChangeBack,
     setState: setStateBack
   } = useInputValue("");
+
+  useEffect(
+    () => {
+      setupListener();
+      getFlashcards();
+
+      setActiveCard(activeCard);
+
+      return () => removeListener();
+    },
+    [activeCard]
+  );
 
   function setupListener() {
     mainCard.current.addEventListener("click", toggleFlip);
@@ -78,8 +78,10 @@ function App() {
   }
 
   function clearFields() {
+    console.log("clear");
     setStateFront("");
     setStateBack("");
+    console.log("clear2");
   }
 
   function selectCard(flashCard) {
