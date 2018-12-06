@@ -10,6 +10,7 @@ import "./styles.css";
 
 function App() {
   let mainCard = useRef();
+  let smallCard = useRef();
   let cardContainer = useRef();
   let [isEditing, setEditingState] = useState(false);
   let [activeCard, setActiveCard] = useState(null);
@@ -30,7 +31,22 @@ function App() {
   useEffect(
     () => {
       setupListener();
-      getFlashcards();
+      getFlashcards().then(() => {
+        let smallCards = Array.from(document.querySelectorAll(".small-card"));
+        smallCards.forEach(card => {
+          card.addEventListener("mouseover", e => {
+            console.log(e.target);
+            if (e.target === card) {
+              card.classList.add("active-card");
+            }
+          });
+          card.addEventListener("mouseout", e => {
+            if (e.target === card) {
+              card.classList.remove("active-card");
+            }
+          });
+        });
+      });
 
       setActiveCard(activeCard);
 
@@ -49,6 +65,8 @@ function App() {
 
   function toggleFlip(event) {
     let cardContainerClassList = cardContainer.current.classList;
+    console.log(event.target.closest(".main-card"));
+    console.log(event.target);
 
     /** Clicking input field should not trigger class toggling */
     if (event.target !== mainCard.current) return;
@@ -78,10 +96,8 @@ function App() {
   }
 
   function clearFields() {
-    console.log("clear");
     setStateFront("");
     setStateBack("");
-    console.log("clear2");
   }
 
   function selectCard(flashCard) {
@@ -137,6 +153,7 @@ function App() {
           {flashCards.map((card, index) => {
             return (
               <SmallFlashcard
+                smallCard={smallCard}
                 selectCard={selectCard}
                 card={card}
                 index={index}
