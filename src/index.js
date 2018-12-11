@@ -49,6 +49,8 @@ function App() {
 
   function toggleFlip(event) {
     let cardContainerClassList = cardContainer.current.classList;
+    console.log(event.target.closest(".main-card"));
+    console.log(event.target);
 
     /** Clicking input field should not trigger class toggling */
     if (event.target !== mainCard.current) return;
