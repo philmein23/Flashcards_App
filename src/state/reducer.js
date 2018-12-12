@@ -29,10 +29,13 @@ function flashCardsReducer(state = [], action) {
 
   if (action.type === "EDIT_FLASHCARD") {
     let flashCards = state;
-    let foundCard = flashCards.find(card => card.id === action.flashCard.id);
-    if (foundCard) {
-      return {};
-    }
+    let editedFlashCard = action.flashCard;
+    return flashCards.map(card => {
+      if (card.id === editedFlashCard.id) {
+        card = { ...card, ...editedFlashCard };
+      }
+      return card;
+    });
   }
 
   if (action.type === "REMOVE_FLASHCARD") {

@@ -35,6 +35,7 @@ export function useFirebaseStore() {
 
   async function updateFlashCard(flashCard) {
     await flashCardCollection.doc(flashCard.id).update(flashCard);
+    dispatch({ type: "EDIT_FLASHCARD", flashCard });
   }
 
   return {
