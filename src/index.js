@@ -99,7 +99,9 @@ function App() {
   }
 
   /** TODO - ADD EDIT CARD FUNCTION */
-  function editCard(selectedCard) {
+  function editCard(event, selectedCard) {
+    event.preventDefault();
+
     setStateFront(selectedCard.front);
     setStateBack(selectedCard.back);
 

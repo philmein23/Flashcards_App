@@ -1,19 +1,19 @@
-import { useReducer } from 'react';
+import { useReducer } from "react";
 
 const initialState = [];
 
 function flashCardsReducer(state = [], action) {
-  if (action.type === 'GET_FLASHCARDS') {
-    console.log('here', state);
+  if (action.type === "GET_FLASHCARDS") {
+    console.log("here", state);
     return [...action.flashCards];
   }
 
-  if (action.type === 'ADD_FLASHCARD') {
-    console.log('state', state, 'card', action.flashCard);
+  if (action.type === "ADD_FLASHCARD") {
+    console.log("state", state, "card", action.flashCard);
     return [...state, action.flashCard];
   }
 
-  if (action.type === 'SELECT_FLASHCARD') {
+  if (action.type === "SELECT_FLASHCARD") {
     let selectedFlashCard = action.flashCard;
     let flashCards = state;
 
@@ -27,7 +27,15 @@ function flashCardsReducer(state = [], action) {
     });
   }
 
-  if (action.type === 'REMOVE_FLASHCARD') {
+  if (action.type === "EDIT_FLASHCARD") {
+    let flashCards = state;
+    let foundCard = flashCards.find(card => card.id === action.flashCard.id);
+    if (foundCard) {
+      return {};
+    }
+  }
+
+  if (action.type === "REMOVE_FLASHCARD") {
     let selectedFlashCard = action.flashCard;
     let flashCards = state;
 

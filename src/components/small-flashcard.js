@@ -17,7 +17,7 @@ export default function SmallFlashcard({
     >
       <div className="front-small">{card.front}</div>
       {card.isActive ? (
-        <button className="edit" onClick={() => editCard(card)}>
+        <button className="edit" onClick={e => editCard(e, card)}>
           Edit
         </button>
       ) : null}
