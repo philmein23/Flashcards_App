@@ -20,7 +20,7 @@ database.settings({
 export function useFirebaseStore() {
   let flashCardCollection = database.collection("flashcards");
   let { state: flashCards, dispatch } = useAppReducer();
-  console.log("firebase");
+  console.log("firebase", flashCards);
   async function getFlashcards() {
     let querySnapshot = await flashCardCollection.get();
     let flashCards = querySnapshot.docs.map(doc => doc.data());
@@ -31,6 +31,7 @@ export function useFirebaseStore() {
   async function addFlashCard(flashCard) {
     await flashCardCollection.add(flashCard);
     dispatch({ type: "ADD_FLASHCARD", flashCard });
+    console.log("dispatch new card");
   }
 
   async function updateFlashCard(flashCard) {

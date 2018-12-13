@@ -7,6 +7,7 @@ export default function Flashcard({
   onChangeBack,
   activeCard,
   isEditing,
+  isAdding,
   addNewCard,
   toggleSideMenu,
   sidebarIsActive,
@@ -42,7 +43,12 @@ export default function Flashcard({
   }
 
   function renderSaveButton() {
-    return <button className="submit">Save Card</button>;
+    return (
+      <div>
+        <button className="cancel">Cancel</button>
+        <button className="submit">Save Card</button>;
+      </div>
+    );
   }
 
   return (
@@ -60,11 +66,11 @@ export default function Flashcard({
       </div>
       <div ref={cardContainer} id="card-container" className="card-container">
         <div ref={mainCard} className="main-card">
-          {isEditing ? renderNewCard() : renderActiveCard()}
+          {isEditing || isAdding ? renderNewCard() : renderActiveCard()}
         </div>
       </div>
       <div className="button-container">
-        {isEditing ? renderSaveButton() : null}
+        {isEditing || isAdding ? renderSaveButton() : null}
       </div>
     </div>
   );

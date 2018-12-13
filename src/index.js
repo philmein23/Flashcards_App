@@ -11,10 +11,16 @@ import "./styles.css";
 function App() {
   let mainCard = useRef();
   let cardContainer = useRef();
+  let [isAdding, setAddingState] = useState(false);
   let [isEditing, setEditingState] = useState(false);
   let [activeCard, setActiveCard] = useState(null);
   let [sidebarIsActive, toggleSideBar] = useState(true);
-  let { flashCards, getFlashcards, addFlashCard } = useFirebaseStore();
+  let {
+    flashCards,
+    getFlashcards,
+    addFlashCard,
+    updateFlashCard
+  } = useFirebaseStore();
 
   const {
     value: frontValue,
@@ -31,7 +37,7 @@ function App() {
     () => {
       setupListener();
       getFlashcards();
-
+      console.log("effect");
       setActiveCard(activeCard);
 
       return () => removeListener();
@@ -61,11 +67,17 @@ function App() {
   function addNewCard(event) {
     event.preventDefault();
     clearFields();
-    setEditingState(true);
+    setAddingState(true);
   }
 
   async function saveFlashCard(event) {
     event.preventDefault();
+
+    if (isEditing) {
+      updateFlashCard();
+      setEditingState(false);
+      return;
+    }
 
     const flashCard = {
       id: generateId(),
@@ -75,7 +87,7 @@ function App() {
 
     await addFlashCard(flashCard);
     setActiveCard(flashCard);
-    setEditingState(false);
+    setAddingState(false);
     clearFields();
   }
 
@@ -105,7 +117,7 @@ function App() {
     setStateFront(selectedCard.front);
     setStateBack(selectedCard.back);
 
-    setEditingState(true);
+    setAddingState(true);
   }
   /** TODO - ADD REMOVE CARD FUNCTION */
 
@@ -122,6 +134,7 @@ function App() {
       onChangeBack,
       activeCard,
       isEditing,
+      isAdding,
       addNewCard,
       toggleSideMenu,
       sidebarIsActive,

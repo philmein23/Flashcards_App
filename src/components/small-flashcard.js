@@ -17,9 +17,12 @@ export default function SmallFlashcard({
     >
       <div className="front-small">{card.front}</div>
       {card.isActive ? (
-        <button className="edit" onClick={e => editCard(e, card)}>
-          Edit
-        </button>
+        <div className="action-buttons">
+          <button className="delete">Remove</button>
+          <button className="edit" onClick={e => editCard(e, card)}>
+            Edit
+          </button>
+        </div>
       ) : null}
     </div>
   );

@@ -4,12 +4,10 @@ const initialState = [];
 
 function flashCardsReducer(state = [], action) {
   if (action.type === "GET_FLASHCARDS") {
-    console.log("here", state);
     return [...action.flashCards];
   }
 
   if (action.type === "ADD_FLASHCARD") {
-    console.log("state", state, "card", action.flashCard);
     return [...state, action.flashCard];
   }
 
