@@ -28,32 +28,28 @@ function App() {
     setState: setStateBack
   } = useInputValue("");
 
-  useEffect(
-    () => {
-      setupListener();
-      getFlashcards().then(() => {
-        let smallCards = Array.from(document.querySelectorAll(".small-card"));
-        smallCards.forEach(card => {
-          card.addEventListener("mouseover", e => {
-            console.log(e.target);
-            if (e.target === card) {
-              card.classList.add("active-card");
-            }
-          });
-          card.addEventListener("mouseout", e => {
-            if (e.target === card) {
-              card.classList.remove("active-card");
-            }
-          });
+  useEffect(() => {
+    setupListener();
+    getFlashcards().then(() => {
+      let smallCards = Array.from(document.querySelectorAll(".small-card"));
+      smallCards.forEach((card) => {
+        card.addEventListener("mouseover", (e) => {
+          if (e.target === card) {
+            card.classList.add("active-card");
+          }
+        });
+        card.addEventListener("mouseout", (e) => {
+          if (e.target === card) {
+            card.classList.remove("active-card");
+          }
         });
       });
+    });
 
-      setActiveCard(activeCard);
+    setActiveCard(activeCard);
 
-      return () => removeListener();
-    },
-    [isEditing]
-  );
+    return () => removeListener();
+  }, [isEditing]);
 
   function setupListener() {
     mainCard.current.addEventListener("click", toggleFlip);
@@ -65,9 +61,6 @@ function App() {
 
   function toggleFlip(event) {
     let cardContainerClassList = cardContainer.current.classList;
-    console.log(event.target.closest(".main-card"));
-    console.log(event.target);
-
     /** Clicking input field should not trigger class toggling */
     if (event.target !== mainCard.current) return;
 
@@ -103,7 +96,7 @@ function App() {
   function selectCard(flashCard) {
     flashCard.isActive = true;
 
-    flashCards.forEach(card => {
+    flashCards.forEach((card) => {
       if (card.id !== flashCard.id) {
         card.isActive = false;
       }
@@ -143,7 +136,7 @@ function App() {
   }
 
   return (
-    <form onSubmit={e => saveFlashCard(e)}>
+    <form onSubmit={(e) => saveFlashCard(e)}>
       <div className="container">
         <div
           className={`sidebar-nav 
