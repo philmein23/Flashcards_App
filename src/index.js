@@ -8,6 +8,7 @@ import { useFirebaseStore } from "./firebase";
 
 // TODO: BUG  - Not able to add content to reverse side of flashcard
 // TODO: Need to handle editing for existing flashcard
+// TODO: Add ability to remove existing flashcards
 
 import "./styles.css";
 
