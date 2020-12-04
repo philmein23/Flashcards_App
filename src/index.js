@@ -6,6 +6,9 @@ import { useInputValue } from "./state/useInput";
 import { generateId } from "./utils";
 import { useFirebaseStore } from "./firebase";
 
+// TODO: BUG  - Not able to add content to reverse side of flashcard
+// TODO: Need to handle editing for existing flashcard
+
 import "./styles.css";
 
 function App() {
